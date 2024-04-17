@@ -1,0 +1,23 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "backend for todo app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app"
+  },
+  "keywords": [
+    "todo",
+    "webapp"
+  ],
+  "author": "Alex Mathai",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2",
+    "mongoose": "^8.3.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}
