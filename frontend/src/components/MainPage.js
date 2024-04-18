@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import ProjectContainer from "./ProjectContainer";
+import AddProject from "./AddProject";
 
 const MainPage = () => {
   return (
@@ -19,6 +20,9 @@ const MainPage = () => {
       {/* project section */}
       <div>
         <ProjectContainer />
+      </div>
+      <div className="flex justify-center w-full">
+        <AddProject />
       </div>
     </div>
   );
