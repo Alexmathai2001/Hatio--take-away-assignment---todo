@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const LoginPage = () => {
+const SignUpPage = () => {
   return (
     <div className="flex flex-col h-screen bg-slate-200">
       <div className="flex flex-grow"></div>
@@ -14,12 +14,19 @@ const LoginPage = () => {
           <div className="py-10 px-[2rem] md:w-1/2 w-full bg-white rounded-r-lg">
             <form action="" id="login-form" method="post" className="flex flex-col h-full">
               <div>
-                <p className="my-1 font-semibold text-xl">Login to proceed</p>
+                <p className="my-1 font-semibold text-xl">New User? Sign Up</p>
                 <p className="text-gray-500 text-base">Enter your details to continue,</p>
                 <div className="my-4">
-                  <input type="email" name="email" className="py-2 px-4 outline-none border-2 rounded-lg w-full text-sm" placeholder="Email" id="userEmail" />
+
+                  <input type="text" name="Full Name" className="py-2 px-4 outline-none border-2 rounded-lg w-full text-sm" placeholder="Full Name" id="fullName" />
+
+                  <input type="email" name="email" className="py-2 px-4 mt-4 outline-none border-2 rounded-lg w-full text-sm" placeholder="Email" id="userEmail" />
 
                   <input type="password" name="password" className="py-2 mt-4 px-4 outline-none border-2 rounded-lg w-full text-sm" placeholder="Password" id="userPassword" />
+
+
+                  <input type="password" name="confirmpassword" className="py-2 mt-4 px-4 outline-none border-2 rounded-lg w-full text-sm" placeholder="Re-Enter the Password" id="userPassword" />
+
                   <span id="phone-error" className="text-xs my-3 text-red-500 flex justify-center">Error message here</span>
                 </div>
                 <p className="text-xs text-gray-500">By continuing, you agree to website's <a className="text-blue-600" href="">terms and conditions</a></p>
@@ -27,8 +34,8 @@ const LoginPage = () => {
               <div id="recaptcha-container"></div>
               <div className="flex flex-grow"></div>
               <div>
-              <Link to={'/'} className="flex justify-center mb-2 border-2 border-blue-500 rounded-full text-blue-500 text-sm py-2 font-medium">Back to Home</Link>
-                <button id="sign-in-button" className="w-full bg-blue-500 rounded-full text-white text-sm py-2 font-medium">Log in</button>
+                <Link to={'/'} className="flex justify-center mb-2 border-2 border-blue-500 rounded-full text-blue-500 text-sm py-2 font-medium">Back to Home</Link>
+                <button id="sign-in-button" className="w-full bg-blue-500 rounded-full text-white text-sm py-2 font-medium">Sign Up</button>
               </div>
             </form>
           </div>
@@ -39,4 +46,4 @@ const LoginPage = () => {
   );
 }
 
-export default LoginPage;
+export default SignUpPage;
