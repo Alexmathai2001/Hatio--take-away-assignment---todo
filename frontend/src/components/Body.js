@@ -4,6 +4,7 @@ import Login from './LoginPage'
 import Home from './HomePage'
 import SignUpPage from './SignUpPage'
 import MainPage from './MainPage'
+import ProjectDescription from './ProjectDescription'
 
 const Body = () => {
 
@@ -23,6 +24,10 @@ const Body = () => {
         {
           path : '/main',
           element : <MainPage />
+        },
+        {
+          path : '/description',
+          element : <ProjectDescription />
         }
     ])
 

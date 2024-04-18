@@ -3,7 +3,8 @@ import ProjectCard from './ProjectCard'
 
 const ProjectContainer = () => {
   return (
-    <div>
+    <div className='py-10 px-4 w-full flex gap-2'>
+        <ProjectCard />
         <ProjectCard />
     </div>
   )
