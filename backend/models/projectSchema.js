@@ -12,8 +12,8 @@ const projectSchema = new mongoose.Schema({
     projectID : String,
     projectName : String,
     projectDesc : String,
-    createdDate : Date,
-    updatedDate : Date,
+    createdDate : String,
+    updatedDate : String,
     todoList : [todoSchema]
 
 })

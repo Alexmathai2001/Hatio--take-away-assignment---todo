@@ -26,7 +26,7 @@ const Body = () => {
           element : <MainPage />
         },
         {
-          path : '/description',
+          path : '/description/:id',
           element : <ProjectDescription />
         }
     ])

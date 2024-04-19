@@ -1,23 +1,37 @@
 import axios from "axios";
 import React, { useState } from "react";
 
-const AddProject = ({data}) => {
+const AddProject = ({data,isUpdated}) => {
 
   const [projectName,setProjectName] = useState("")
   const [projectDesc,setProjectDesc] = useState("")
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    console.log(projectName + projectDesc)
-    const data = await axios.post('/postaddproject')
-  }
+    e.preventDefault();
+
+    try {
+      const response = await axios.post('/postaddproject', {
+        projectName: projectName,
+        projectDesc: projectDesc
+      });
+      data(false)
+      console.log("alex")
+      console.log(response.data);
+      if(response.data.status == "success"){
+        isUpdated("updated")
+      }
+
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
 
    const handleClose = () => {
     data(false)
   }
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white border-2 rounded-md w-10/12 p-3 font-poppins">
+      <div className="bg-white border-2 rounded-md w-10/12 md:w-4/12 p-3 font-poppins">
         <button onClick={handleClose} className="flex justify-end w-full">
           <span className="material-symbols-outlined">close</span>
         </button>

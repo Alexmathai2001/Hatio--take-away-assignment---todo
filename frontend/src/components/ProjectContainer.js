@@ -1,13 +1,15 @@
 import React from 'react'
 import ProjectCard from './ProjectCard'
 
-const ProjectContainer = () => {
+const ProjectContainer = (data) => {  
+  console.log(data.data)
   return (
-    <div className='py-10 px-4 grid grid-cols-2 gap-2'>
-        <ProjectCard />
-        <ProjectCard />
-        <ProjectCard />
-        <ProjectCard />
+    <div className='py-10 px-6 grid grid-cols-2 md:grid-cols-6 gap-4'>
+      {data.data.map((data,index) => {
+        return (
+        <ProjectCard info={data} key={index} />
+        )
+      })}
     </div>
   )
 }

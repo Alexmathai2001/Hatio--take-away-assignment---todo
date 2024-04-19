@@ -2,8 +2,11 @@ const express = require('express')
 const connectdb = require("./connection")
 const app = express()
 const approuter = require('./routes/appRoute')
-const bodyparser = require('body-parser')
+const cors = require('cors')
 
+
+app.use(cors())
+app.use(express.json());
 app.use(express.urlencoded({
     extended : true,
    limit : '50mb'
