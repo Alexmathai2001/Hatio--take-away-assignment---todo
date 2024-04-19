@@ -1,9 +1,14 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
 import ProjectContainer from "./ProjectContainer";
 import AddProject from "./AddProject";
 
 const MainPage = () => {
+  const [showpopup,setShowpopup] = useState(false)
+
+
+  const handleNewProject = () => {
+    setShowpopup(!showpopup)
+  }
   return (
     <div>
       {/* header */}
@@ -12,7 +17,7 @@ const MainPage = () => {
           <h1 className="font-bold text-xl text-blue-700">To-Do</h1>
         </div>
         <div>
-          <button className="px-5 py-2 rounded-lg bg-blue-700 text-white font-medium">
+          <button onClick={handleNewProject} className="px-5 py-2 rounded-lg bg-blue-700 text-white font-medium">
             New Project
           </button>
         </div>
@@ -22,7 +27,7 @@ const MainPage = () => {
         <ProjectContainer />
       </div>
       <div className="flex justify-center w-full">
-        <AddProject />
+        { showpopup && <AddProject data={setShowpopup} />}
       </div>
     </div>
   );

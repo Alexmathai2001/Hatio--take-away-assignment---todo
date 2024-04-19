@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 const ProjectDescription = () => {
   const [activeTasks, setActiveTasks] = useState([]);
@@ -18,15 +19,58 @@ const ProjectDescription = () => {
     setCompletedTasks([...completedTasks, completedTask]);
     setActiveTasks(updatedActiveTasks);
   };
+
+  const handleDeleteTask = (index, taskType) => {
+    if (taskType === "active") {
+      const updatedActiveTasks = [...activeTasks];
+      updatedActiveTasks.splice(index, 1);
+      setActiveTasks(updatedActiveTasks);
+    } else if (taskType === "completed") {
+      const updatedCompletedTasks = [...completedTasks];
+      updatedCompletedTasks.splice(index, 1);
+      setCompletedTasks(updatedCompletedTasks);
+    }
+  };
+
+  // const handleSave = () => {
+  //   // Prepare data to send to backend
+  //   const data = {
+  //     projectName: projectName,
+  //     projectDescription: projectDescription,
+  //     activeTasks: activeTasks,
+  //     completedTasks: completedTasks,
+  //   };
+
+  //   // Make POST request to backend
+  //   axios.post("your-backend-api-endpoint", data)
+  //     .then((response) => {
+  //       // Handle success
+  //       console.log("Data successfully saved:", response.data);
+  //       // Optionally, you can navigate to another page or show a success message
+  //     })
+  //     .catch((error) => {
+  //       // Handle error
+  //       console.error("Error saving data:", error);
+  //     });
+  // };
+
   return (
     <div className="py-10 px-5 font-poppins">
-      <button className="block mb-10">
-        <div className="flex items-center">
-        <span class="material-symbols-outlined text-lg">arrow_back_ios</span>
-        <p>Go Back</p>
-        </div>
-      </button>
-      <hi className="text-2xl font-bold text-blue-700">Project Name</hi>
+      <div className="w-full flex justify-between items-center mb-10">
+        <Link to={"/main"} className="flex items-center">
+          <span className="material-symbols-outlined text-lg">
+            arrow_back_ios
+          </span>
+          <p>Go Back</p>
+        </Link>
+
+        <button className="bg-gray-500 text-white font-medium px-5 py-1 text-sm rounded-md">Export</button>
+      </div>
+
+      <input
+        value={"Project Name"}
+        className="text-2xl outline-none font-bold text-blue-700"
+      ></input>
       <p className="text-sm text-slate-500">
         Created on : <span className="font-semibold">3rd April 2024</span>
       </p>
@@ -71,6 +115,10 @@ const ProjectDescription = () => {
               setActiveTasks(updatedActiveTasks);
             }}
           />
+          {/* remove button */}
+          <button onClick={() => handleDeleteTask(index, "active")} className="text-sm text-red-600 font-medium">
+            <img src="/images/remove.png" className="w-6"></img>
+          </button>
         </div>
       ))}
       <p className="mt-5 font-medium text-sm  text-blue-700">Completed</p>
@@ -90,6 +138,10 @@ const ProjectDescription = () => {
             value={task.text}
             readOnly
           />
+          {/* remove button */}
+          <button onClick={() => handleDeleteTask(index, "completed")} className="text-sm text-red-600 font-medium">
+            <img src="/images/remove.png" className="w-6"></img>
+          </button>
         </div>
       ))}
 
