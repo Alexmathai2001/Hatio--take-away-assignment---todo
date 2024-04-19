@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState } from "react";
 
 const AddProject = ({data}) => {
@@ -5,8 +6,10 @@ const AddProject = ({data}) => {
   const [projectName,setProjectName] = useState("")
   const [projectDesc,setProjectDesc] = useState("")
 
-  const handleSubmit = () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault()
     console.log(projectName + projectDesc)
+    const data = await axios.post('/postaddproject')
   }
 
    const handleClose = () => {
