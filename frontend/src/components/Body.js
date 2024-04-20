@@ -22,7 +22,7 @@ const Body = () => {
           element : <SignUpPage />
         },
         {
-          path : '/main',
+          path : '/main/:id',
           element : <MainPage />
         },
         {

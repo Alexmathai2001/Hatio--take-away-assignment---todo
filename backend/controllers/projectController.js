@@ -3,13 +3,13 @@ const projectModel = require("../models/projectSchema");
 module.exports = {
   postaddproject: (req, res) => {
     try {
-      console.log(req.body);
+      console.log(req.session.loginuser);
 
       const projectID = createProjectID();
       const currentDate = new Date();
       const formattedDate = formatDate(currentDate);
       const newProject = new projectModel({
-        user: "Alex",
+        user: req.session.loginuser,
         projectID: projectID,
         projectName: req.body.projectName,
         projectDesc: req.body.projectDesc,
@@ -24,14 +24,14 @@ module.exports = {
   },
   getprojects: async (req, res) => {
     try {
-      const data = await projectModel.find();
+      console.log(req.session.loginuser + "hemme")
+      const data = await projectModel.find({user : req.params.userid});
       res.json(data);
     } catch (error) {}
   },
   savetodo: async (req, res) => {
     try {
       let { projectName, activeTasks, completedTasks ,projectID} = req.body;
-      console.log(req.body);
 
       // Find the project by ID
       const project = await projectModel.findOne({ projectID: projectID });
@@ -75,7 +75,6 @@ module.exports = {
       if (completedTasks) {
         completedTasks.forEach((task) => {
           if (task.taskName) {
-            console.log("yes");
             const existingTaskIndex = project.todoList.findIndex(
               (existingTask) =>
                 existingTask.taskName === task.taskName && !existingTask.status
@@ -84,7 +83,6 @@ module.exports = {
             if (existingTaskIndex !== -1) {
               // Update the status of the existing task to true
               project.todoList[existingTaskIndex].status = true;
-              console.log(`Task "${task.taskName}" status updated to true.`);
 
               // Remove the task from the activeTasks array
               activeTasks = activeTasks.filter(
@@ -111,7 +109,6 @@ module.exports = {
   },
   getTodoData: async (req, res) => {
     try {
-      console.log(req.params.todoID)
       const data = await projectModel.find({ projectID: req.params.todoID });
       res.json(data);
     } catch (error) {
@@ -124,7 +121,6 @@ module.exports = {
 function createProjectID() {
   const randomNumber = Math.floor(1000 + Math.random() * 9000);
   const result = `PROJ-${randomNumber}`;
-  console.log("entered ");
   return result;
 }
 function formatDate(date) {

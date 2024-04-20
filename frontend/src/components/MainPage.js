@@ -2,15 +2,18 @@ import React, { useEffect, useState } from "react";
 import ProjectContainer from "./ProjectContainer";
 import AddProject from "./AddProject";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 
 const MainPage = () => {
+  const {id} = useParams()
   const [showpopup,setShowpopup] = useState(false)
   const [projectdata,setProjectdata] = useState([])
   const [added,setAdded] = useState('update')
 
   useEffect(() => {
     const call = async () => {
-      const response = await axios.get('/getprojects')
+      console.log(id+"hello")
+      const response = await axios.get('/getprojects/'+id)
       const data = (response.data)
       setProjectdata(data)
     }

@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 const ProjectDescription = () => {
   const {id} = useParams()
@@ -92,12 +92,12 @@ const ProjectDescription = () => {
   return (
     <div className="py-10 px-5 font-poppins">
       <div className="w-full flex justify-between items-center mb-10">
-        <Link to={"/main"} className="flex items-center">
+        <button onClick={() => {window.history.back();}} className="flex items-center">
           <span className="material-symbols-outlined text-lg">
             arrow_back_ios
           </span>
           <p>Go Back</p>
-        </Link>
+        </button>
 
         <button className="bg-gray-500 text-white font-medium px-5 py-1 text-sm rounded-md">
           Export

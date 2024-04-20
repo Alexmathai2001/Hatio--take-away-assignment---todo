@@ -1,14 +1,38 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import axios from 'axios';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
+  const navigate = useNavigate()
 
-  const handleEmail = () => {
+  const [email,setEmail] = useState()
+  const [password,setPassword] = useState()
+  const [errorMsg,setErrorMsg] = useState("")
 
+  const handleEmail = (e) => {
+    const email = e.target.value
+    setEmail(email)
   }
 
-  const handlePassword = () => {
+  const handlePassword = (e) => {
+    const password = e.target.value
+    setPassword(password)
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    const data = {
+      email : email,
+      password : password
+    }
+    const api = await axios.post('/checklogin',data)
+    console.log(api)
+    if(api?.data?.status === "success"){
+      navigate('/main/'+api?.data?.userId)
+    }
+    setErrorMsg(api?.data?.status)
     
+
   }
   return (
     <div className="flex flex-col h-screen bg-slate-200">
@@ -28,7 +52,7 @@ const LoginPage = () => {
                   <input onChange={handleEmail} type="email" name="email" className="py-2 px-4 outline-none border-2 rounded-lg w-full text-sm" placeholder="Email" id="userEmail" ></input>
 
                   <input onChange={handlePassword} type="password" name="password" className="py-2 mt-4 px-4 outline-none border-2 rounded-lg w-full text-sm" placeholder="Password" id="userPassword" ></input>
-                  <span id="phone-error" className="text-xs my-3 text-red-500 flex justify-center">Error message here</span>
+                  <span id="phone-error" className="text-xs my-3 text-red-500 flex justify-center">{errorMsg}</span>
                 </div>
                 <p className="text-xs text-gray-500">By continuing, you agree to website's <a className="text-blue-600" href="">terms and conditions</a></p>
               </div>
@@ -36,7 +60,7 @@ const LoginPage = () => {
               <div className="flex flex-grow"></div>
               <div>
               <Link to={'/'} className="flex justify-center mb-2 border-2 border-blue-500 rounded-full text-blue-500 text-sm py-2 font-medium">Back to Home</Link>
-                <button id="sign-in-button" className="w-full bg-blue-500 rounded-full text-white text-sm py-2 font-medium">Log in</button>
+                <button onClick={handleSubmit} id="sign-in-button" className="w-full bg-blue-500 rounded-full text-white text-sm py-2 font-medium">Log in</button>
               </div>
             </form>
           </div>
