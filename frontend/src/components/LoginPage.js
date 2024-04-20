@@ -2,6 +2,14 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const LoginPage = () => {
+
+  const handleEmail = () => {
+
+  }
+
+  const handlePassword = () => {
+    
+  }
   return (
     <div className="flex flex-col h-screen bg-slate-200">
       <div className="flex flex-grow"></div>
@@ -17,9 +25,9 @@ const LoginPage = () => {
                 <p className="my-1 font-semibold text-xl">Login to proceed</p>
                 <p className="text-gray-500 text-base">Enter your details to continue,</p>
                 <div className="my-4">
-                  <input type="email" name="email" className="py-2 px-4 outline-none border-2 rounded-lg w-full text-sm" placeholder="Email" id="userEmail" />
+                  <input onChange={handleEmail} type="email" name="email" className="py-2 px-4 outline-none border-2 rounded-lg w-full text-sm" placeholder="Email" id="userEmail" ></input>
 
-                  <input type="password" name="password" className="py-2 mt-4 px-4 outline-none border-2 rounded-lg w-full text-sm" placeholder="Password" id="userPassword" />
+                  <input onChange={handlePassword} type="password" name="password" className="py-2 mt-4 px-4 outline-none border-2 rounded-lg w-full text-sm" placeholder="Password" id="userPassword" ></input>
                   <span id="phone-error" className="text-xs my-3 text-red-500 flex justify-center">Error message here</span>
                 </div>
                 <p className="text-xs text-gray-500">By continuing, you agree to website's <a className="text-blue-600" href="">terms and conditions</a></p>

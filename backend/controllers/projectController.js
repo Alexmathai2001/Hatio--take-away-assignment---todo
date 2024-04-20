@@ -6,10 +6,8 @@ module.exports = {
       console.log(req.body);
 
       const projectID = createProjectID();
-      console.log("heeeee");
       const currentDate = new Date();
       const formattedDate = formatDate(currentDate);
-      console.log("ehllo");
       const newProject = new projectModel({
         user: "Alex",
         projectID: projectID,
