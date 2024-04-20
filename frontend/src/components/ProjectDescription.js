@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -5,6 +6,11 @@ const ProjectDescription = () => {
   const [activeTasks, setActiveTasks] = useState([]);
   const [completedTasks, setCompletedTasks] = useState([]);
   const [newTask, setNewTask] = useState("");
+  const [projectName,setProjectName] = useState()
+
+  const handleProjectchange = (e) => {
+    setProjectName(e.target.value)
+  }
 
   const handleAddTask = () => {
     if (newTask.trim() !== "") {
@@ -32,27 +38,23 @@ const ProjectDescription = () => {
     }
   };
 
-  // const handleSave = () => {
-  //   // Prepare data to send to backend
-  //   const data = {
-  //     projectName: projectName,
-  //     projectDescription: projectDescription,
-  //     activeTasks: activeTasks,
-  //     completedTasks: completedTasks,
-  //   };
+  const handleSave = () => {
+    const data = {
+      projectName: projectName,
+      activeTasks: activeTasks,
+      completedTasks: completedTasks,
+    };
 
-  //   // Make POST request to backend
-  //   axios.post("your-backend-api-endpoint", data)
-  //     .then((response) => {
-  //       // Handle success
-  //       console.log("Data successfully saved:", response.data);
-  //       // Optionally, you can navigate to another page or show a success message
-  //     })
-  //     .catch((error) => {
-  //       // Handle error
-  //       console.error("Error saving data:", error);
-  //     });
-  // };
+    console.log(data)
+
+    axios.post("/savetodo", data)
+      .then((response) => {
+        console.log("Data successfully saved:", response.data);
+      })
+      .catch((error) => {
+        console.error("Error saving data:", error);
+      });
+  };
 
   return (
     <div className="py-10 px-5 font-poppins">
@@ -70,7 +72,7 @@ const ProjectDescription = () => {
       </div>
       <div className="md:mx-96">
         <input
-          value={"Project Name"}
+        onChange={handleProjectchange}
           className="text-2xl outline-none font-bold text-blue-700"
         ></input>
         <p className="text-sm text-slate-500">
@@ -154,7 +156,7 @@ const ProjectDescription = () => {
         ))}
 
         <div className="w-full flex justify-end">
-          <button className="px-5 mt-10 py-2 bg-yellow-600 text-sm font-semibold rounded-md text-white">
+          <button onClick={handleSave} className="px-5 mt-10 py-2 bg-yellow-600 text-sm font-semibold rounded-md text-white">
             Save
           </button>
         </div>
