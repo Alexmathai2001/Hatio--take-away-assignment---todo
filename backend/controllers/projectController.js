@@ -32,87 +32,89 @@ module.exports = {
   },
   savetodo: async (req, res) => {
     try {
-        const projectID = "PROJ-3188";
-        let { projectName, activeTasks, completedTasks } = req.body;
-        console.log(req.body);
+      let { projectName, activeTasks, completedTasks ,projectID} = req.body;
+      console.log(req.body);
 
-        // Find the project by ID
-        const project = await projectModel.findOne({ projectID: projectID });
+      // Find the project by ID
+      const project = await projectModel.findOne({ projectID: projectID });
 
-        if (!project) {
-            return res.status(404).json({ message: "Project not found" });
-        }
+      if (!project) {
+        return res.status(404).json({ message: "Project not found" });
+      }
 
-        // Update project properties if projectName is provided
-        if (projectName) {
-            project.projectName = projectName;
-        }
+      // Update project properties if projectName is provided
+      if (projectName) {
+        project.projectName = projectName;
+      }
 
-        // Update or add active tasks
-        if (activeTasks) {
-            activeTasks.forEach((task) => {
-                if (task.taskName) {
-                    // Find the index of the task in the project's todoList
-                    const existingTaskIndex = project.todoList.findIndex(
-                        (existingTask) => existingTask.taskName === task.taskName
-                    );
+      // Update or add active tasks
+      if (activeTasks) {
+        activeTasks.forEach((task) => {
+          if (task.taskName) {
+            // Find the index of the task in the project's todoList
+            const existingTaskIndex = project.todoList.findIndex(
+              (existingTask) => existingTask.taskName === task.taskName
+            );
 
-                    if (existingTaskIndex === -1) {
-                        // Task does not exist, add it
-                        project.todoList.push({
-                            taskName: task.taskName,
-                            taskTime: new Date(), // Assuming taskTime is the current time
-                            status: false, // Assuming all new tasks are initially not completed
-                        });
-                    } else {
-                        // Task exists, update its status if needed
-                        if (!project.todoList[existingTaskIndex].status) {
-                            project.todoList[existingTaskIndex].status = false;
-                        }
-                    }
-                }
-            });
-        }
+            if (existingTaskIndex === -1) {
+              // Task does not exist, add it
+              project.todoList.push({
+                taskName: task.taskName,
+                taskTime: new Date(), // Assuming taskTime is the current time
+                status: false, // Assuming all new tasks are initially not completed
+              });
+            } else {
+              // Task exists, update its status if needed
+              if (!project.todoList[existingTaskIndex].status) {
+                project.todoList[existingTaskIndex].status = false;
+              }
+            }
+          }
+        });
+      }
 
-        // Update completed tasks and remove them from active tasks
-        if (completedTasks) {
-            completedTasks.forEach((task) => {
-                if (task.taskName) {
-                    console.log("yes");
-                    const existingTaskIndex = project.todoList.findIndex(
-                        (existingTask) => existingTask.taskName === task.taskName && !existingTask.status
-                    );
+      // Update completed tasks and remove them from active tasks
+      if (completedTasks) {
+        completedTasks.forEach((task) => {
+          if (task.taskName) {
+            console.log("yes");
+            const existingTaskIndex = project.todoList.findIndex(
+              (existingTask) =>
+                existingTask.taskName === task.taskName && !existingTask.status
+            );
 
-                    if (existingTaskIndex !== -1) {
-                        // Update the status of the existing task to true
-                        project.todoList[existingTaskIndex].status = true;
-                        console.log(`Task "${task.taskName}" status updated to true.`);
+            if (existingTaskIndex !== -1) {
+              // Update the status of the existing task to true
+              project.todoList[existingTaskIndex].status = true;
+              console.log(`Task "${task.taskName}" status updated to true.`);
 
-                        // Remove the task from the activeTasks array
-                        activeTasks = activeTasks.filter((activeTask) => activeTask.taskName !== task.taskName);
-                    } else {
-                        // Task with the same name and status false not found, do nothing
-                        console.log(`Task "${task.taskName}" not found with status false.`);
-                    }
-                }
-            });
-        }
+              // Remove the task from the activeTasks array
+              activeTasks = activeTasks.filter(
+                (activeTask) => activeTask.taskName !== task.taskName
+              );
+            } else {
+              // Task with the same name and status false not found, do nothing
+              console.log(
+                `Task "${task.taskName}" not found with status false.`
+              );
+            }
+          }
+        });
+      }
 
-        // Save the updated project
-        await project.save();
+      // Save the updated project
+      await project.save();
 
-        return res.status(200).json({ message: "Project updated successfully" });
+      return res.status(200).json({ message: "Project updated successfully" });
     } catch (error) {
-        console.error("Error saving todo:", error);
-        return res.status(500).json({ message: "Internal server error" });
+      console.error("Error saving todo:", error);
+      return res.status(500).json({ message: "Internal server error" });
     }
-},
-
-  
-
+  },
   getTodoData: async (req, res) => {
     try {
-      const data = await projectModel.find({ projectID: "PROJ-3188" });
+      console.log(req.params.todoID)
+      const data = await projectModel.find({ projectID: req.params.todoID });
       res.json(data);
     } catch (error) {
       console.error("Error fetching project data:", error);

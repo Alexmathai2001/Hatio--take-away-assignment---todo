@@ -1,19 +1,22 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 const ProjectDescription = () => {
+  const {id} = useParams()
   const [activeTasks, setActiveTasks] = useState([]);
   const [completedTasks, setCompletedTasks] = useState([]);
   const [newTask, setNewTask] = useState("");
   const [projectName, setProjectName] = useState();
   const [updatedDate, setUpdatedDate] = useState();
   const [projectDesc, setProjectDesc] = useState();
+  
 
   useEffect(() => {
     const call = async () => {
       try {
-        const response = await axios.get("/getTodoData");
+        console.log(id)
+        const response = await axios.get("/getTodoData/"+id);
         const data = response.data?.[0];
         setProjectName(data.projectName);
         setUpdatedDate(data.updatedDate);
@@ -22,8 +25,6 @@ const ProjectDescription = () => {
         const completedTasks = data.todoList.filter((task) => task.status);
         setActiveTasks(activeTasks);
         setCompletedTasks(completedTasks);
-
-        console.log(activeTasks);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -70,11 +71,12 @@ const ProjectDescription = () => {
 
   const handleSave = () => {
     const data = {
+      projectID : id,
       projectName: projectName,
       activeTasks: activeTasks,
       completedTasks: completedTasks,
     };
-    console.log("hello");
+    console.log(id);
     console.log(data);
 
     axios
