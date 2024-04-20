@@ -1,28 +1,58 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 const ProjectDescription = () => {
   const [activeTasks, setActiveTasks] = useState([]);
   const [completedTasks, setCompletedTasks] = useState([]);
   const [newTask, setNewTask] = useState("");
-  const [projectName,setProjectName] = useState()
+  const [projectName, setProjectName] = useState();
+  const [updatedDate, setUpdatedDate] = useState();
+  const [projectDesc, setProjectDesc] = useState();
+
+  useEffect(() => {
+    const call = async () => {
+      try {
+        const response = await axios.get("/getTodoData");
+        const data = response.data?.[0];
+        setProjectName(data.projectName);
+        setUpdatedDate(data.updatedDate);
+        setProjectDesc(data.projectDesc);
+        const activeTasks = data.todoList.filter((task) => !task.status);
+        const completedTasks = data.todoList.filter((task) => task.status);
+        setActiveTasks(activeTasks);
+        setCompletedTasks(completedTasks);
+
+        console.log(activeTasks);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    call();
+  }, []);
 
   const handleProjectchange = (e) => {
-    setProjectName(e.target.value)
-  }
+    setProjectName(e.target.value);
+  };
 
   const handleAddTask = () => {
     if (newTask.trim() !== "") {
-      setActiveTasks([...activeTasks, { text: newTask, completed: false }]);
+      setActiveTasks([...activeTasks, { taskName: newTask, status: false }]);
       setNewTask("");
     }
   };
 
   const handleTaskCompletion = (index) => {
-    const updatedActiveTasks = [...activeTasks];
-    const completedTask = updatedActiveTasks.splice(index, 1)[0];
+    
+    const completedTask = activeTasks[index];
+    completedTask.status = true;
+
+    // Add the completed task to the completedTasks array
     setCompletedTasks([...completedTasks, completedTask]);
+
+    // Remove the completed task from activeTasks
+    const updatedActiveTasks = activeTasks.filter((task, i) => i !== index);
     setActiveTasks(updatedActiveTasks);
   };
 
@@ -44,10 +74,11 @@ const ProjectDescription = () => {
       activeTasks: activeTasks,
       completedTasks: completedTasks,
     };
+    console.log("hello");
+    console.log(data);
 
-    console.log(data)
-
-    axios.post("/savetodo", data)
+    axios
+      .post("/savetodo", data)
       .then((response) => {
         console.log("Data successfully saved:", response.data);
       })
@@ -72,17 +103,14 @@ const ProjectDescription = () => {
       </div>
       <div className="md:mx-96">
         <input
-        onChange={handleProjectchange}
-          className="text-2xl outline-none font-bold text-blue-700"
+          value={projectName}
+          onChange={handleProjectchange}
+          className="text-2xl outline-none capitalize font-bold text-blue-700"
         ></input>
         <p className="text-sm text-slate-500">
-          Created on : <span className="font-semibold">3rd April 2024</span>
+          <span className="font-semibold">{updatedDate}</span>
         </p>
-        <p className="text-sm my-5 text-slate-700">
-          lorem ipsum generatior is an online website which is used to generate
-          randon text which can be used as sample ocntent for any undefined or
-          unchecked data{" "}
-        </p>
+        <p className="text-sm my-5 text-slate-700">{projectDesc}</p>
         <div className="flex w-full gap-2">
           <input
             className="w-8/12 text-sm px-2 border-gray-500 border-[1px] rounded-md"
@@ -112,20 +140,14 @@ const ProjectDescription = () => {
               type="text"
               className="ml-3 w-full border-b border-gray-300 focus:outline-none focus:border-indigo-500"
               placeholder="Enter your todo item"
-              value={task.text}
+              value={task.taskName}
               onChange={(e) => {
                 const updatedActiveTasks = [...activeTasks];
                 updatedActiveTasks[index].text = e.target.value;
                 setActiveTasks(updatedActiveTasks);
               }}
             />
-            {/* remove button */}
-            <button
-              onClick={() => handleDeleteTask(index, "active")}
-              className="text-sm text-red-600 font-medium"
-            >
-              <img src="/images/remove.png" className="w-6"></img>
-            </button>
+            
           </div>
         ))}
         <p className="mt-5 font-medium text-sm  text-blue-700">Completed</p>
@@ -138,25 +160,24 @@ const ProjectDescription = () => {
               checked
               readOnly
             />
-            <input
+            <p className="ms-2 text-gray-500">{task.taskName}</p>
+            {/* <input
               type="text"
               className="ml-3 w-full border-b border-gray-300 focus:outline-none focus:border-indigo-500"
               placeholder="Enter your todo item"
-              value={task.text}
+              value={task.taskName}
               readOnly
-            />
+            /> */}
             {/* remove button */}
-            <button
-              onClick={() => handleDeleteTask(index, "completed")}
-              className="text-sm text-red-600 font-medium"
-            >
-              <img src="/images/remove.png" className="w-6"></img>
-            </button>
+            
           </div>
         ))}
 
         <div className="w-full flex justify-end">
-          <button onClick={handleSave} className="px-5 mt-10 py-2 bg-yellow-600 text-sm font-semibold rounded-md text-white">
+          <button
+            onClick={handleSave}
+            className="px-5 mt-10 py-2 bg-yellow-600 text-sm font-semibold rounded-md text-white"
+          >
             Save
           </button>
         </div>
