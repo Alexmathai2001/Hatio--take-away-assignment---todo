@@ -13,5 +13,6 @@ router.get('/getTodoData/:todoID',projectController.getTodoData)
 
 router.post('/userSignup',userController.userSignup)
 router.post('/checklogin',userController.checklogin)
+router.get('/logout',userController.logout)
 
 module.exports = router

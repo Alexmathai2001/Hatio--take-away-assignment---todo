@@ -35,6 +35,10 @@ module.exports = {
       res.json({ status: "email id not found" });
     }
   },
+  logout : async (req,res) => {
+    req.session.destroy();
+    res.json()
+  }
 };
 
 function createUserID() {
