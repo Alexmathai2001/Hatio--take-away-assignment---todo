@@ -1,22 +1,22 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 const ProjectDescription = () => {
-  const {id} = useParams()
+  const { id } = useParams();
   const [activeTasks, setActiveTasks] = useState([]);
   const [completedTasks, setCompletedTasks] = useState([]);
   const [newTask, setNewTask] = useState("");
   const [projectName, setProjectName] = useState();
   const [updatedDate, setUpdatedDate] = useState();
   const [projectDesc, setProjectDesc] = useState();
-  
+  const [gistUrl, setGistUrl] = useState("");
 
   useEffect(() => {
     const call = async () => {
       try {
-        console.log(id)
-        const response = await axios.get("/getTodoData/"+id);
+        console.log(id);
+        const response = await axios.get("/getTodoData/" + id);
         const data = response.data?.[0];
         setProjectName(data.projectName);
         setUpdatedDate(data.updatedDate);
@@ -45,7 +45,6 @@ const ProjectDescription = () => {
   };
 
   const handleTaskCompletion = (index) => {
-    
     const completedTask = activeTasks[index];
     completedTask.status = true;
 
@@ -71,7 +70,7 @@ const ProjectDescription = () => {
 
   const handleSave = () => {
     const data = {
-      projectID : id,
+      projectID: id,
       projectName: projectName,
       activeTasks: activeTasks,
       completedTasks: completedTasks,
@@ -89,19 +88,98 @@ const ProjectDescription = () => {
       });
   };
 
+  const downloadMdFromUrl = async (gistUrl) => {
+    try {
+      console.log("Downloading Markdown file from:", gistUrl);
+      const response = await fetch(gistUrl);
+      if (!response.ok) {
+        throw new Error("Failed to fetch Gist data");
+      }
+      const gistData = await response.json();
+      console.log(gistData);
+
+      let mdContent = "";
+      // Iterate over files in the Gist
+      for (const fileName in gistData.files) {
+        const fileInfo = gistData.files[fileName];
+
+        // Check if file is Markdown
+        if (fileInfo.language === "Markdown") {
+          // Append Markdown content
+          mdContent += fileInfo.content;
+        }
+      }
+
+      // Create a Blob with the Markdown content
+      const blob = new Blob([mdContent], { type: "text/markdown" });
+
+      // Create a temporary URL for the Blob
+      const downloadUrl = URL.createObjectURL(blob);
+
+      // Create a temporary link element
+      const link = document.createElement("a");
+      link.href = downloadUrl;
+      link.download = "gist_file.md"; // Name of the downloaded file
+      link.click();
+
+      // Clean up
+      URL.revokeObjectURL(downloadUrl);
+    } catch (error) {
+      console.error(
+        "An error occurred while downloading the Markdown file:",
+        error
+      );
+    }
+  };
+
+  const handleSubmit = async () => {
+    try {
+      const gistCall = await axios.post("/getgist/" + id);
+      console.log("onn podappa");
+      console.log(gistCall.data);
+
+      // Check if data contains the Gist URL
+      if (gistCall.data) {
+        // Extract the Gist URL
+        const gistUrl = gistCall.data;
+        setGistUrl(gistUrl);
+        console.log(gistUrl + "   url found");
+
+        // Download the Markdown file using the Gist URL
+        await downloadMdFromUrl(gistUrl);
+        console.log("Markdown file downloaded successfully.");
+      } else {
+        console.log("Gist URL not found in the response data.");
+      }
+    } catch (error) {
+      console.error("An error occurred:", error);
+    }
+  };
+
   return (
     <div className="py-10 px-5 font-poppins">
       <div className="w-full flex justify-between items-center mb-10">
-        <button onClick={() => {window.history.back();}} className="flex items-center">
+        <button
+          onClick={() => {
+            window.history.back();
+          }}
+          className="flex items-center"
+        >
           <span className="material-symbols-outlined text-lg">
             arrow_back_ios
           </span>
           <p>Go Back</p>
         </button>
-
-        <button className="bg-gray-500 text-white font-medium px-5 py-1 text-sm rounded-md">
-          Export
-        </button>
+        {gistUrl === "" ? (
+          <button
+            onClick={handleSubmit}
+            className="bg-gray-500 text-white font-medium px-5 py-1 text-sm rounded-md"
+          >
+            Export
+          </button>
+        ) : (
+          <Link className="bg-green-100 text-green-700 font-medium px-5 py-1 text-sm rounded-md" to={gistUrl}>View Gist</Link>
+        )}
       </div>
       <div className="md:mx-96">
         <input
@@ -149,7 +227,6 @@ const ProjectDescription = () => {
                 setActiveTasks(updatedActiveTasks);
               }}
             />
-            
           </div>
         ))}
         <p className="mt-5 font-medium text-sm  text-blue-700">Completed</p>
@@ -171,7 +248,6 @@ const ProjectDescription = () => {
               readOnly
             /> */}
             {/* remove button */}
-            
           </div>
         ))}
 

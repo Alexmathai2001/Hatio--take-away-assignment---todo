@@ -1,4 +1,23 @@
+async function setupOctokit() {
+  let Octokit;
+  try {
+      const { Octokit: OctokitModule } = await import('@octokit/core');
+      Octokit = OctokitModule;
+  } catch (error) {
+      console.error('Error importing Octokit:', error);
+      throw new Error('Failed to import Octokit');
+  }
+  return Octokit;
+}
+
+// Use setupOctokit function to set up Octokit
+setupOctokit().then((Octokit) => {
+  // Now you can use Octokit here or export it from this module
+  module.exports.Octokit = Octokit;
+});
+
 const projectModel = require("../models/projectSchema");
+require("dotenv").config()
 
 module.exports = {
   postaddproject: (req, res) => {
@@ -24,14 +43,14 @@ module.exports = {
   },
   getprojects: async (req, res) => {
     try {
-      console.log(req.session.loginuser + "hemme")
-      const data = await projectModel.find({user : req.params.userid});
+      console.log(req.session.loginuser + "hemme");
+      const data = await projectModel.find({ user: req.params.userid });
       res.json(data);
     } catch (error) {}
   },
   savetodo: async (req, res) => {
     try {
-      let { projectName, activeTasks, completedTasks ,projectID} = req.body;
+      let { projectName, activeTasks, completedTasks, projectID } = req.body;
 
       // Find the project by ID
       const project = await projectModel.findOne({ projectID: projectID });
@@ -116,27 +135,62 @@ module.exports = {
       res.status(500).json({ message: "Internal server error" });
     }
   },
+  getgist: async (req, res) => {
+    // Inside getgist function, use the Octokit instance returned by setupOctokit
+    const Octokit = await setupOctokit();
+
+    console.log(req.params.projectid);
+    const projectData = await projectModel.find({ projectID: req.params.projectid });
+    console.log(projectData[0]?.todoList);
+
+    const projectTitle = projectData[0]?.projectName;
+    const todos = projectData[0]?.todoList;
+
+    const markdownContent = generateProjectSummary(projectTitle, todos);
+    console.log(markdownContent);
+    const gistUrl = await createSecretGist(projectTitle + '.md', markdownContent);
+    console.log("maria");
+    console.log(gistUrl);
+    res.json(gistUrl)
+  }
 };
+
+async function createSecretGist(filename, content) {
+  const octokit = new module.exports.Octokit({
+      auth: process.env.GITHUB_ACCESS_TOKEN
+  });
+
+  try {
+      const response = await octokit.request('POST /gists', {
+          description: 'Example of a gist',
+          public: false,
+          files: {
+              [filename]: {
+                  content: content
+              }
+          },
+          headers: {
+              'X-GitHub-Api-Version': '2022-11-28'
+          }
+      });
+
+      return response.data.html_url;
+  } catch (error) {
+      console.error('Error creating gist:', error.message);
+      throw new Error('Failed to create gist');
+  }
+}
 
 function createProjectID() {
   const randomNumber = Math.floor(1000 + Math.random() * 9000);
   const result = `PROJ-${randomNumber}`;
   return result;
 }
+
 function formatDate(date) {
   const monthNames = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
   ];
 
   const day = date.getDate();
@@ -145,4 +199,33 @@ function formatDate(date) {
   const formattedDate = `${day} ${monthNames[monthIndex]}, ${year}`;
 
   return formattedDate;
+}
+
+function generateProjectSummary(projectTitle, todos) {
+  // Calculate the number of completed and pending todos
+  const completedTodos = todos.filter(todo => todo.status);
+  const pendingTodos = todos.filter(todo => !todo.status);
+
+  // Generate the Markdown content
+  let markdown = `# ${projectTitle}\n\n`;
+  markdown += `## Summary\n`;
+  markdown += `* ${completedTodos.length} / ${todos.length} completed\n\n`;
+
+  // Generate the section for pending todos
+  markdown += `## Pending Todos\n`;
+  markdown += generateTodoList(pendingTodos);
+
+  // Generate the section for completed todos
+  markdown += `## Completed Todos\n`;
+  markdown += generateTodoList(completedTodos);
+
+  return markdown;
+}
+
+function generateTodoList(todos) {
+  let list = '';
+  todos.forEach(todo => {
+      list += `- [${todo.status ? 'x' : ' '}] ${todo.taskName}\n`;
+  });
+  return list;
 }
