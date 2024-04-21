@@ -12,10 +12,11 @@ const ProjectDescription = () => {
   const [projectDesc, setProjectDesc] = useState();
   const [gistUrl, setGistUrl] = useState("");
 
+  
+
   useEffect(() => {
     const call = async () => {
       try {
-        console.log(id);
         const response = await axios.get("/getTodoData/" + id);
         const data = response.data?.[0];
         setProjectName(data.projectName);
@@ -48,24 +49,10 @@ const ProjectDescription = () => {
     const completedTask = activeTasks[index];
     completedTask.status = true;
 
-    // Add the completed task to the completedTasks array
     setCompletedTasks([...completedTasks, completedTask]);
 
-    // Remove the completed task from activeTasks
     const updatedActiveTasks = activeTasks.filter((task, i) => i !== index);
     setActiveTasks(updatedActiveTasks);
-  };
-
-  const handleDeleteTask = (index, taskType) => {
-    if (taskType === "active") {
-      const updatedActiveTasks = [...activeTasks];
-      updatedActiveTasks.splice(index, 1);
-      setActiveTasks(updatedActiveTasks);
-    } else if (taskType === "completed") {
-      const updatedCompletedTasks = [...completedTasks];
-      updatedCompletedTasks.splice(index, 1);
-      setCompletedTasks(updatedCompletedTasks);
-    }
   };
 
   const handleSave = () => {
@@ -75,8 +62,6 @@ const ProjectDescription = () => {
       activeTasks: activeTasks,
       completedTasks: completedTasks,
     };
-    console.log(id);
-    console.log(data);
 
     axios
       .post("/savetodo", data)
@@ -135,15 +120,12 @@ const ProjectDescription = () => {
   const handleSubmit = async () => {
     try {
       const gistCall = await axios.post("/getgist/" + id);
-      console.log("onn podappa");
-      console.log(gistCall.data);
 
       // Check if data contains the Gist URL
       if (gistCall.data) {
         // Extract the Gist URL
         const gistUrl = gistCall.data;
         setGistUrl(gistUrl);
-        console.log(gistUrl + "   url found");
 
         // Download the Markdown file using the Gist URL
         await downloadMdFromUrl(gistUrl);
@@ -240,14 +222,6 @@ const ProjectDescription = () => {
               readOnly
             />
             <p className="ms-2 text-gray-500">{task.taskName}</p>
-            {/* <input
-              type="text"
-              className="ml-3 w-full border-b border-gray-300 focus:outline-none focus:border-indigo-500"
-              placeholder="Enter your todo item"
-              value={task.taskName}
-              readOnly
-            /> */}
-            {/* remove button */}
           </div>
         ))}
 
