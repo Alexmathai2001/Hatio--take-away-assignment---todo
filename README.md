@@ -45,7 +45,7 @@ GITHUB_ACCESS_TOKEN = '#your_access_token_here'
 
 Install backend dependencies using 
 ```bash
-cd /backend
+cd backend/
 npm i 
 ```
 Run backend using 
@@ -54,7 +54,7 @@ npm run start
 ```
 After this open new terminal and run these commands
 ```bash
-cd /frontend
+cd frontend/
 npm i
 npm start
 ```
@@ -63,7 +63,7 @@ App will get opened in your default browser.
 
 ## Screenshots
 
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![App Screenshot](https://drive.google.com/file/d/14UGQZFU1GUkbLB1WoasO8s7I6qZG7C0u/view?usp=sharing)
 
 
 ## Tech Stack

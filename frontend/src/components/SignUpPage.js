@@ -68,12 +68,12 @@ const SignUpPage = () => {
   
 
   return (
-    <div className="flex flex-col h-screen bg-slate-200">
+    <div className="flex flex-col h-screen bg-slate-200 font-poppins">
       <div className="flex flex-grow"></div>
       <div className="flex justify-center">
         <div className="md:h-[40rem] h-screen md:w-3/5 w-screen border-2 rounded-xl flex shadow-lg">
-          <div className="w-1/2 bg-blue-600 rounded-l-lg bg-cover hidden md:flex flex-col items-center text-center h-full">
-            <p className="text-white font-semibold text-2xl mt-14 px-8">Why invest in tools you use once? <br /> <span className="text-sm font-normal">Rent the best for your project, and let us <br /> take care of the rest.</span></p>
+        <div className="w-1/2 bg-[url('coverphot21.webp')] rounded-l-lg bg-cover hidden md:flex flex-col items-center text-center h-full">
+            <p className="font-semibold text-2xl mt-14 px-8 text-black">Turn your to-dos into ta-das! <br /> <span className="text-sm font-normal">Manage work with us</span></p>
           </div>
           {/* right box */}
           <div className="py-10 px-[2rem] md:w-1/2 w-full bg-white rounded-r-lg">
