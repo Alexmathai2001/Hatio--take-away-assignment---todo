@@ -63,7 +63,8 @@ App will get opened in your default browser.
 
 ## Screenshots
 
-![App Screenshot](https://drive.google.com/file/d/14UGQZFU1GUkbLB1WoasO8s7I6qZG7C0u/view?usp=sharing)
+![App Screenshot](![Screenshot from 2024-04-22 12-17-20](https://github.com/Alexmathai2001/Hatio--take-away-assignment---todo/assets/69806852/306c9b1c-38fd-4d09-b4d7-20fdae7299a3)
+)
 
 
 ## Tech Stack
