@@ -63,8 +63,12 @@ App will get opened in your default browser.
 
 ## Screenshots
 
-![App Screenshot](![Screenshot from 2024-04-22 12-17-20](https://github.com/Alexmathai2001/Hatio--take-away-assignment---todo/assets/69806852/306c9b1c-38fd-4d09-b4d7-20fdae7299a3)
-)
+![Screenshot from 2024-04-22 12-17-20](https://github.com/Alexmathai2001/Hatio--take-away-assignment---todo/assets/69806852/306c9b1c-38fd-4d09-b4d7-20fdae7299a3)
+![Screenshot from 2024-04-22 13-26-59](https://github.com/Alexmathai2001/Hatio--take-away-assignment---todo/assets/69806852/1a818545-3c14-4a20-9105-1ec97ed6a7b4)
+![Screenshot from 2024-04-22 13-27-15](https://github.com/Alexmathai2001/Hatio--take-away-assignment---todo/assets/69806852/3dde945b-a90e-40c7-a46e-ad181f70220f)
+![Screenshot from 2024-04-22 13-27-25](https://github.com/Alexmathai2001/Hatio--take-away-assignment---todo/assets/69806852/c5a4c187-00b5-4e98-8af2-82b3f68cdf24)
+![Screenshot from 2024-04-22 13-27-37](https://github.com/Alexmathai2001/Hatio--take-away-assignment---todo/assets/69806852/9ec7fd0b-7882-41c0-9a7d-db669f8a3e7a)
+
 
 
 ## Tech Stack
