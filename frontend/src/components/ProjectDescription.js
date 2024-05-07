@@ -84,24 +84,18 @@ const ProjectDescription = () => {
       console.log(gistData);
 
       let mdContent = "";
-      // Iterate over files in the Gist
       for (const fileName in gistData.files) {
         const fileInfo = gistData.files[fileName];
 
-        // Check if file is Markdown
         if (fileInfo.language === "Markdown") {
-          // Append Markdown content
           mdContent += fileInfo.content;
         }
       }
 
-      // Create a Blob with the Markdown content
       const blob = new Blob([mdContent], { type: "text/markdown" });
 
-      // Create a temporary URL for the Blob
       const downloadUrl = URL.createObjectURL(blob);
 
-      // Create a temporary link element
       const link = document.createElement("a");
       link.href = downloadUrl;
       link.download = "gist_file.md"; // Name of the downloaded file
@@ -121,13 +115,10 @@ const ProjectDescription = () => {
     try {
       const gistCall = await axios.post("/getgist/" + id);
 
-      // Check if data contains the Gist URL
       if (gistCall.data) {
-        // Extract the Gist URL
         const gistUrl = gistCall.data;
         setGistUrl(gistUrl);
 
-        // Download the Markdown file using the Gist URL
         await downloadMdFromUrl(gistUrl);
         console.log("Markdown file downloaded successfully.");
       } else {

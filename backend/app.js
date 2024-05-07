@@ -12,7 +12,7 @@ app.use(express.urlencoded({
    limit : '50mb'
 }))
 app.use(session({
-   secret: 'your-secret-key', // Change this to a secret key for session encryption
+   secret: 'your-secret-key', 
    resave: false,
    saveUninitialized: false
 }));

@@ -51,8 +51,6 @@ module.exports = {
   savetodo: async (req, res) => {
     try {
       let { projectName, activeTasks, completedTasks, projectID } = req.body;
-
-      // Find the project by ID
       const project = await projectModel.findOne({ projectID: projectID });
 
       if (!project) {
